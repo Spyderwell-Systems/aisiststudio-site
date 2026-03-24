@@ -1,130 +1,794 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>AIsist Studio — Humans × AI</title>
-  <meta name="description" content="A boutique studio where humans and AI grind out the good stuff. Strategy, brand, copy, and builds — shipped fast and clean.">
-  <link rel="icon" href="assets/logo.png">
-  <style>
-    /* --- Reset (tiny) --- */
-    *,*::before,*::after{box-sizing:border-box}
-    html,body{margin:0;padding:0}
-    img{max-width:100%;height:auto;display:block}
-    a{color:inherit}
-    /* --- Theme --- */
-    :root{
-      --bg:#0b0b0c;
-      --fg:#f7f7f8;
-      --muted:#b8bcc6;
-      --accent:#b1ff5c; /* electric hint */
-      --card:#121214;
-      --border:#202025;
-      --radius:14px;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-    }
-    @media (prefers-color-scheme: light){
-      :root{--bg:#fafafa;--fg:#111;--muted:#555;--card:#ffffff;--border:#eaeaea}
-      .logo-invert{filter:invert(0)}
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIsist Studio — Humans × AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #0d0d0d;
+    --paper:      #f5f2ec;
+    --warm-white: #faf8f4;
+    --mid:        #6b6560;
+    --faint:      #e8e4dc;
+    --rule:       #d4cfc6;
+    --accent:     #c8502a;
+    --accent-dk:  #a33d1e;
+    --glow:       rgba(200, 80, 42, 0.08);
 
-    body{background:var(--bg);color:var(--fg);font:16px/1.5 ui-sans-serif, system-ui,-apple-system, Segoe UI, Roboto, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji}
-    .wrap{max-width:980px;margin:0 auto;padding:24px 20px 80px}
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'DM Sans', sans-serif;
+  }
 
-    /* --- Header --- */
-    header{display:flex;gap:14px;align-items:center;justify-content:space-between}
-    .brand{display:flex;gap:12px;align-items:center}
-    .brand img{width:40px;height:40px;border-radius:10px;background:#000;object-fit:contain;padding:2px}
-    .brand .name{font-weight:700;letter-spacing:.2px}
-    .badge{font-size:12px;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:999px}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* --- Hero --- */
-    .hero{margin:44px 0 24px;display:grid;gap:18px}
-    .headline{font-size:34px;line-height:1.1;font-weight:800;letter-spacing:-.02em}
-    .sub{color:var(--muted)}
-    .cta-row{display:flex;gap:10px;flex-wrap:wrap}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 18px;border-radius:12px;text-decoration:none;border:1px solid var(--border);background:var(--card);box-shadow:var(--shadow)}
-    .btn.primary{background:var(--accent);color:#111;border-color:transparent;font-weight:800}
-    .btn:active{transform:translateY(1px)}
+  html { scroll-behavior: smooth; }
 
-    /* --- Cards --- */
-    .grid{display:grid;gap:14px;margin-top:22px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px}
-    .card h3{margin:0 0 6px;font-size:16px}
-    .card p{margin:0;color:var(--muted)}
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 
-    /* --- Footer --- */
-    footer{margin-top:40px;color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;align-items:center}
-    .dot{width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block;margin:0 6px 1px}
+  /* ─── NOISE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 999;
+  }
 
-    /* --- Larger screens --- */
-    @media (min-width:720px){
-      .headline{font-size:48px}
-      .grid{grid-template-columns:repeat(3,1fr)}
-      .hero{grid-template-columns:1.2fr .8fr;align-items:center}
-      .hero-art{justify-self:end}
-      .hero-art img{width:160px;height:160px;border-radius:24px;padding:14px;background:#000}
-    }
+  /* ─── HEADER ─── */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245, 242, 236, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
 
-    /* --- Safe area on iPhone --- */
-    .wrap{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
-  </style>
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logotype {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .logotype .ai-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .logotype .wordmark { color: var(--ink); }
+  .logotype .wordmark span { color: var(--mid); }
+
+  nav a {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--mid);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--ink); }
+
+  .nav-cta {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--paper) !important;
+    background: var(--ink);
+    padding: 0.45rem 1rem;
+    border-radius: 3px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--accent) !important; color: var(--paper) !important; }
+
+  /* ─── HERO ─── */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(4rem, 10vw, 8rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: end;
+  }
+
+  @media (max-width: 680px) {
+    .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+  }
+
+  .hero-left {}
+
+  .hero-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-headline {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--mid);
+    max-width: 38ch;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--paper);
+    background: var(--ink);
+    border: 1px solid var(--ink);
+    padding: 0.75rem 1.75rem;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+
+  .btn-ghost {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule);
+    padding: 0.75rem 1.75rem;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  /* ─── HERO RIGHT — MARK ─── */
+  .hero-mark {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1.5rem;
+  }
+
+  .mark-symbol {
+    width: clamp(120px, 16vw, 180px);
+    aspect-ratio: 1;
+    position: relative;
+    align-self: flex-end;
+  }
+
+  .mark-symbol svg {
+    width: 100%; height: 100%;
+  }
+
+  .hero-stat-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: flex-end;
+  }
+
+  .hero-stat {
+    text-align: right;
+  }
+
+  .hero-stat .num {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+  }
+  .hero-stat .label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+
+  /* ─── DIVIDER ─── */
+  .rule-line {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+  .rule-line hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* ─── FOR WHO ─── */
+  .for-who {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 680px) {
+    .for-who { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding-top: 0.35rem;
+  }
+
+  .who-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 500px) {
+    .who-list { grid-template-columns: 1fr; }
+  }
+
+  .who-item {
+    border-left: 2px solid var(--rule);
+    padding-left: 1rem;
+    transition: border-color 0.2s;
+  }
+  .who-item:hover { border-color: var(--accent); }
+
+  .who-item h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-style: italic;
+    margin-bottom: 0.35rem;
+    color: var(--ink);
+  }
+
+  .who-item p {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ─── SERVICES ─── */
+  .services {
+    background: var(--ink);
+    color: var(--paper);
+    padding: clamp(3rem, 6vw, 5rem) 0;
+  }
+
+  .services-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .services-header {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 4rem;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 680px) {
+    .services-header { grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+  }
+
+  .services-header .section-label { color: rgba(245,242,236,0.4); }
+
+  .services-tagline {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--paper);
+    max-width: 50ch;
+  }
+
+  .services-tagline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid rgba(245,242,236,0.12);
+  }
+
+  @media (max-width: 780px) {
+    .service-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 500px) {
+    .service-grid { grid-template-columns: 1fr; }
+  }
+
+  .service-item {
+    padding: 2rem 1.75rem;
+    border-right: 1px solid rgba(245,242,236,0.12);
+    border-bottom: 1px solid rgba(245,242,236,0.12);
+    transition: background 0.25s;
+    cursor: default;
+  }
+
+  .service-item:hover { background: rgba(200, 80, 42, 0.06); }
+
+  .service-item:nth-child(3n) { border-right: none; }
+  @media (max-width: 780px) {
+    .service-item:nth-child(2n) { border-right: none; }
+    .service-item:nth-child(3n) { border-right: 1px solid rgba(245,242,236,0.12); }
+  }
+
+  .service-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .service-name {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--paper);
+    margin-bottom: 0.6rem;
+  }
+
+  .service-desc {
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: rgba(245,242,236,0.55);
+    font-weight: 300;
+  }
+
+  /* ─── HOW ─── */
+  .how {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 680px) {
+    .how { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .how-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .how-step {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1.25rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: start;
+  }
+  .how-step:first-child { border-top: 1px solid var(--rule); }
+
+  .step-n {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    padding-top: 0.2rem;
+  }
+
+  .step-body h3 {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--ink);
+    margin-bottom: 0.3rem;
+  }
+
+  .step-body p {
+    font-size: 0.85rem;
+    color: var(--mid);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  /* ─── CTA BAND ─── */
+  .cta-band {
+    background: var(--accent);
+    padding: clamp(3rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .cta-band-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cta-copy h2 {
+    font-family: var(--serif);
+    font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+    color: var(--paper);
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-copy p {
+    font-size: 0.9rem;
+    color: rgba(245,242,236,0.75);
+    font-weight: 300;
+  }
+
+  .btn-light {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+    background: var(--paper);
+    border: none;
+    padding: 0.85rem 2rem;
+    border-radius: 3px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-light:hover { background: var(--warm-white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--rule);
+    padding: 2rem clamp(1.5rem, 5vw, 4rem);
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .footer-meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--mid);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .footer-links a {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--mid);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--ink); }
+
+  /* ─── FADE IN ─── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <img src="assets/logo.png" alt="AIsist Studio logo" class="logo-invert">
-        <div class="name">AIsist Studio</div>
-      </div>
-      <div class="badge">Humans × AI</div>
-    </header>
 
-    <section class="hero">
-      <div>
-        <h1 class="headline">Boutique builds, <span class="dot"></span> brand, and words — forged by people and AI.</h1>
-        <p class="sub">We pair sharp human judgment with model power to ship fast, clean work: strategy, identity, copy, and lightweight apps. No fluff. Just outcomes.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="mailto:hello@aisiststudio.com?subject=Start a build with AIsist">Start a build</a>
-          <a class="btn" href="#menu">See the quick menu</a>
+<!-- HEADER -->
+<header>
+  <div class="nav-inner">
+    <a href="#" class="logotype" aria-label="AIsist Studio home">
+      <span class="ai-mark">AI</span>
+      <span class="wordmark">sist <span>Studio</span></span>
+    </a>
+    <nav style="display:flex;align-items:center;gap:2rem;">
+      <a href="#services">Services</a>
+      <a href="#how">How it works</a>
+      <a class="nav-cta" href="mailto:hello@aisiststudio.com?subject=Start a build">Start a build →</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div class="hero-left fade-up">
+      <p class="hero-eyebrow">Humans × AI</p>
+      <h1 class="hero-headline">
+        Sharp work,<br>
+        <em>shipped fast.</em>
+      </h1>
+      <p class="hero-sub">
+        A boutique studio that pairs human judgment with model power. Strategy, brand, copy, and lightweight builds — no fluff, no bloat, just outcomes.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="mailto:hello@aisiststudio.com?subject=Start a build with AIsist">Start a build</a>
+        <a class="btn-ghost" href="#services">See what we do</a>
+      </div>
+    </div>
+
+    <div class="hero-mark fade-up" style="transition-delay:0.15s">
+      <!-- Geometric mark: interlocking A + I forms -->
+      <div class="mark-symbol">
+        <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- outer ring -->
+          <circle cx="80" cy="80" r="72" stroke="#0d0d0d" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.2"/>
+          <!-- main A form -->
+          <path d="M80 28 L116 120 H104 L94 96 H66 L56 120 H44 Z" fill="#0d0d0d"/>
+          <path d="M70 82 L80 54 L90 82 Z" fill="#f5f2ec"/>
+          <!-- I accent bar -->
+          <rect x="118" y="40" width="10" height="80" rx="2" fill="#c8502a"/>
+          <!-- base rule -->
+          <line x1="32" y1="130" x2="128" y2="130" stroke="#0d0d0d" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <span class="num">6</span>
+          <span class="label">service tracks</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">1</span>
+          <span class="label">clear output</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">0</span>
+          <span class="label">fluff</span>
         </div>
       </div>
-      <div class="hero-art">
-        <img src="assets/logo.png" alt="AIsist Studio emblem">
-      </div>
-    </section>
-
-    <section class="grid" id="menu">
-      <article class="card">
-        <h3>Brand in a Day</h3>
-        <p>Logo tune-up, palette, voice, and a tight one‑pager. Made to move.</p>
-      </article>
-      <article class="card">
-        <h3>Copy & Concept</h3>
-        <p>Web, email, and product copy that lands. Names, taglines, and scripts, too.</p>
-      </article>
-      <article class="card">
-        <h3>Micro‑Apps</h3>
-        <p>Lean tools and prototypes — Chat flows, automations, and internal dashboards.</p>
-      </article>
-      <article class="card">
-        <h3>Strategy Sprints</h3>
-        <p>Positioning, roadmaps, and a game plan you can actually run.</p>
-      </article>
-      <article class="card">
-        <h3>Design Support</h3>
-        <p>UI polish, assets, and component cleanup for busy teams.</p>
-      </article>
-      <article class="card">
-        <h3>Creative Ops</h3>
-        <p>Systems for repeatable output: prompts, styleguides, and QA loops.</p>
-      </article>
-    </section>
-
-    <footer>
-      <div>Based in Chic’s Beach, VA • Working remote‑first</div>
-      <div><a href="mailto:hello@aisiststudio.com">hello@aisiststudio.com</a></div>
-    </footer>
+    </div>
   </div>
+</section>
+
+<div class="rule-line"><hr></div>
+
+<!-- FOR WHO -->
+<section id="who">
+  <div class="for-who">
+    <p class="section-label fade-up">Built for</p>
+    <div class="who-list">
+      <div class="who-item fade-up">
+        <h3>Founders moving fast</h3>
+        <p>You need real work done, not a six-week discovery process. We get in, build, and hand it off.</p>
+      </div>
+      <div class="who-item fade-up" style="transition-delay:0.07s">
+        <h3>Teams without bandwidth</h3>
+        <p>Your people are stretched. We extend your output without adding headcount.</p>
+      </div>
+      <div class="who-item fade-up" style="transition-delay:0.14s">
+        <h3>Builders who hate agencies</h3>
+        <p>Direct communication, no account manager buffer, work that ships when it's supposed to.</p>
+      </div>
+      <div class="who-item fade-up" style="transition-delay:0.21s">
+        <h3>Anyone who's AI-curious</h3>
+        <p>Not sure how to integrate AI into what you're doing? That's exactly the conversation to start.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule-line"><hr></div>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="services-inner">
+    <div class="services-header">
+      <p class="section-label">What we do</p>
+      <p class="services-tagline">Six tracks. One studio. Everything <em>ships.</em></p>
+    </div>
+
+    <div class="service-grid">
+      <div class="service-item fade-up">
+        <p class="service-num">01</p>
+        <h3 class="service-name">Brand in a Day</h3>
+        <p class="service-desc">Logo tune-up, palette, voice, and a tight one-pager. Identity work that doesn't require a six-figure budget or a six-month timeline.</p>
+      </div>
+      <div class="service-item fade-up" style="transition-delay:0.07s">
+        <p class="service-num">02</p>
+        <h3 class="service-name">Copy & Concept</h3>
+        <p class="service-desc">Web, email, and product copy that lands. Names, taglines, scripts, and positioning that sounds like a human wrote it — because one did.</p>
+      </div>
+      <div class="service-item fade-up" style="transition-delay:0.14s">
+        <p class="service-num">03</p>
+        <h3 class="service-name">Micro-Apps</h3>
+        <p class="service-desc">Lean tools and prototypes. Chat flows, automations, and internal dashboards that actually get used.</p>
+      </div>
+      <div class="service-item fade-up" style="transition-delay:0.07s">
+        <p class="service-num">04</p>
+        <h3 class="service-name">Strategy Sprints</h3>
+        <p class="service-desc">Positioning, roadmaps, and a game plan you can actually run. Tight scope, fast output, no bloated deck.</p>
+      </div>
+      <div class="service-item fade-up" style="transition-delay:0.14s">
+        <p class="service-num">05</p>
+        <h3 class="service-name">Design Support</h3>
+        <p class="service-desc">UI polish, assets, and component cleanup for teams that need to move but don't have a designer on retainer.</p>
+      </div>
+      <div class="service-item fade-up" style="transition-delay:0.21s">
+        <p class="service-num">06</p>
+        <h3 class="service-name">Creative Ops</h3>
+        <p class="service-desc">Systems for repeatable output: prompt libraries, style guides, QA loops. Build once, compound forever.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how">
+  <div class="how">
+    <p class="section-label fade-up">How it works</p>
+    <div class="how-steps">
+      <div class="how-step fade-up">
+        <span class="step-n">01</span>
+        <div class="step-body">
+          <h3>Drop us a line</h3>
+          <p>Tell us what you're trying to ship. One email is enough to get started — no intake forms, no discovery calls required upfront.</p>
+        </div>
+      </div>
+      <div class="how-step fade-up" style="transition-delay:0.07s">
+        <span class="step-n">02</span>
+        <div class="step-body">
+          <h3>We scope it tight</h3>
+          <p>Clear deliverables, clear timeline, clear price. If it's not scoped, it doesn't start.</p>
+        </div>
+      </div>
+      <div class="how-step fade-up" style="transition-delay:0.14s">
+        <span class="step-n">03</span>
+        <div class="step-body">
+          <h3>We build together</h3>
+          <p>Direct back-and-forth. You stay in the loop without being buried in it. Human judgment guides model speed.</p>
+        </div>
+      </div>
+      <div class="how-step fade-up" style="transition-delay:0.21s">
+        <span class="step-n">04</span>
+        <div class="step-body">
+          <h3>It ships</h3>
+          <p>Finished work handed off clean. No proprietary lock-in, no dependency on us to keep the lights on.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<section class="cta-band">
+  <div class="cta-band-inner">
+    <div class="cta-copy">
+      <h2>Ready to build something?</h2>
+      <p>One email starts the whole thing. Based in Chic's Beach, VA — working remote-first.</p>
+    </div>
+    <a class="btn-light" href="mailto:hello@aisiststudio.com?subject=Start a build with AIsist">hello@aisiststudio.com →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <a href="#" class="logotype" style="font-size:0.85rem;gap:0.4rem;">
+        <span class="ai-mark" style="width:22px;height:22px;font-size:0.6rem;">AI</span>
+        <span class="wordmark">sist <span>Studio</span></span>
+      </a>
+      <span class="footer-meta">© <span id="yr"></span> AIsist Studio · Simple is fast.</span>
+    </div>
+    <div class="footer-links">
+      <a href="https://x.com/AIsistStudio" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="mailto:hello@aisiststudio.com">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // Intersection observer for fade-up
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+
 </body>
 </html>
