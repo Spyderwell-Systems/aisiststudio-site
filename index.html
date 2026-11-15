@@ -556,12 +556,12 @@
   .footer-links a:hover { color: var(--ink); }
 
   /* ─── FADE IN ─── */
-  .fade-up {
+  .js-motion .fade-up {
     opacity: 0;
     transform: translateY(18px);
     transition: opacity 0.55s ease, transform 0.55s ease;
   }
-  .fade-up.visible {
+  .js-motion .fade-up.visible {
     opacity: 1;
     transform: none;
   }
@@ -777,7 +777,16 @@
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
 
+  // Progressive enhancement: content stays visible without JavaScript.
+  // Motion is opt-in only when the browser supports IntersectionObserver
+  // and the visitor has not requested reduced motion.
+  const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  if (allowMotion && 'IntersectionObserver' in window) {
+    document.documentElement.classList.add('js-motion');
+  }
+
   // Intersection observer for fade-up
+  if (document.documentElement.classList.contains('js-motion')) {
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -788,6 +797,7 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+  }
 </script>
 
 </body>
